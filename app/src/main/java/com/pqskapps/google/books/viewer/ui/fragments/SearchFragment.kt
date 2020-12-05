@@ -13,6 +13,7 @@ import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.pqskapps.google.books.viewer.GoogleBooksViewerApplication
 import com.pqskapps.google.books.viewer.R
 import com.pqskapps.google.books.viewer.data.viewmodels.BooksViewModel
@@ -22,7 +23,7 @@ class SearchFragment : Fragment(), View.OnClickListener, View.OnFocusChangeListe
     private lateinit var editTextSearch: EditText
     private lateinit var layoutControls: LinearLayout
     private lateinit var progressBar: ProgressBar
-    private lateinit var viewModel: BooksViewModel
+    private val viewModel: BooksViewModel = GoogleBooksViewerApplication.booksViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -42,7 +43,7 @@ class SearchFragment : Fragment(), View.OnClickListener, View.OnFocusChangeListe
         this.editTextSearch.setOnFocusChangeListener(this)
         this.layoutControls = view.findViewById(R.id.layoutControls)
         this.progressBar = view.findViewById(R.id.progressBar)
-        this.viewModel = (activity?.application as GoogleBooksViewerApplication).booksViewModel
+//        this.viewModel = (activity?.application as GoogleBooksViewerApplication).booksViewModel
         this.viewModel.callback = ::navigateToResults
         super.onViewCreated(view, savedInstanceState)
     }
@@ -61,15 +62,15 @@ class SearchFragment : Fragment(), View.OnClickListener, View.OnFocusChangeListe
     }
 
     override fun onFocusChange(v: View?, hasFocus: Boolean) {
+        //if the edit text loses focus, we want to hide the keyboard. othewise it's visible while loading
         if(v == this.editTextSearch && !hasFocus) {
             val inputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(v.windowToken, 0)
         }
     }
     private fun navigateToResults() {
+        this.editTextSearch.findNavController().navigate(R.id.segue_results)
         this.layoutControls.visibility = View.VISIBLE
         this.progressBar.visibility = View.GONE
-        AlertDialog.Builder(this.editTextSearch.context).setMessage(this.viewModel.resultSet.first().title).setTitle("" + this.viewModel.resultSet.size)
-            .setPositiveButton(android.R.string.ok, null).show()
     }
 }
