@@ -35,7 +35,11 @@ class SearchResultsFragment : Fragment(), View.OnClickListener {
         if (view is RecyclerView) {
             with(view) {
                 layoutManager = LinearLayoutManager(context)
-                adapter = MyBookRecyclerViewAdapter(viewModel.resultSet, fragment)
+                adapter = MyBookRecyclerViewAdapter(viewModel.resultSet, fragment, ::loadMoreEntries, viewModel.hasMoreResults)
+            }
+            this.viewModel.callback = {
+                view.adapter?.notifyDataSetChanged()
+                (view.adapter as MyBookRecyclerViewAdapter).hasMoreEntries = viewModel.hasMoreResults
             }
         }
         return view
@@ -49,5 +53,8 @@ class SearchResultsFragment : Fragment(), View.OnClickListener {
         this.viewModel.selectedBook = this.viewModel.resultSet[index]
 
         v.findNavController().navigate(R.id.segue_details)
+    }
+    private fun loadMoreEntries() {
+        this.viewModel.executeSearch()
     }
 }
