@@ -4,10 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.pqskapps.google.books.viewer.data.models.Book
 import com.pqskapps.google.books.viewer.data.repositories.BookRepository
 import com.pqskapps.google.books.viewer.data.repositories.GoogleBookRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 /**
  * View model to handle all of the book processing
@@ -26,6 +23,8 @@ open class BooksViewModel(private val bookRepository: BookRepository): ViewModel
             }//if
             field = value
         }
+    var callback: (() -> Unit)? = null
+    private var didLoadData: Boolean = false
     //complete result set from each page
     val resultSet: MutableList<Book> = mutableListOf<Book>()
     //the current index to use when tapping on the "Load More" button
@@ -37,7 +36,7 @@ open class BooksViewModel(private val bookRepository: BookRepository): ViewModel
 
     //used for coroutines, so that we don't block the main UI thread
     private val viewModelJob = SupervisorJob()
-    private val viewModelScope = CoroutineScope(Dispatchers.Main + this.viewModelJob)
+    private val viewModelScope = CoroutineScope(Dispatchers.IO + this.viewModelJob)
     //boolean flag that will be used to show if we are busy or NOT in the UI
     var isBusy: Boolean = false
         //setter is private since this will be set internally to this view model
@@ -59,6 +58,11 @@ open class BooksViewModel(private val bookRepository: BookRepository): ViewModel
         //do NOT block the main UI thread
         this.viewModelScope.launch {
             queryBooks()
+            if(!didLoadData && resultSet.isNotEmpty() && callback != null) {
+                withContext(Dispatchers.Main) {
+                    callback!!()
+                }
+            }
         }//launch
     }
     protected open fun queryBooks() {

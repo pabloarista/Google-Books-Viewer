@@ -1,33 +1,30 @@
 package com.pqskapps.google.books.viewer.ui.fragments
 
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.Button
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.Fragment
+import com.pqskapps.google.books.viewer.GoogleBooksViewerApplication
 import com.pqskapps.google.books.viewer.R
+import com.pqskapps.google.books.viewer.data.viewmodels.BooksViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SearchFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class SearchFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
+class SearchFragment : Fragment(), View.OnClickListener, View.OnFocusChangeListener {
+    private lateinit var editTextSearch: EditText
+    private lateinit var layoutControls: LinearLayout
+    private lateinit var progressBar: ProgressBar
+    private lateinit var viewModel: BooksViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
@@ -38,23 +35,41 @@ class SearchFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SearchFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SearchFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val btn: Button = view.findViewById(R.id.btnSearch)
+        btn.setOnClickListener(this)
+        this.editTextSearch = view.findViewById(R.id.editTextSearch)
+        this.editTextSearch.setOnFocusChangeListener(this)
+        this.layoutControls = view.findViewById(R.id.layoutControls)
+        this.progressBar = view.findViewById(R.id.progressBar)
+        this.viewModel = (activity?.application as GoogleBooksViewerApplication).booksViewModel
+        this.viewModel.callback = ::navigateToResults
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onClick(v: View?) {
+        val query = "" + this.editTextSearch.text
+        if(query.isBlank()) {
+            AlertDialog.Builder(v!!.context).setMessage(R.string.error_empty_query).setTitle(R.string.error)
+                .setPositiveButton(android.R.string.ok, null).show()
+        } else {
+            this.layoutControls.visibility = View.GONE
+            this.progressBar.visibility = View.VISIBLE
+            this.viewModel.searchItem = query
+            this.viewModel.executeSearch()
+        }//else
+    }
+
+    override fun onFocusChange(v: View?, hasFocus: Boolean) {
+        if(v == this.editTextSearch && !hasFocus) {
+            val inputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(v.windowToken, 0)
+        }
+    }
+    private fun navigateToResults() {
+        this.layoutControls.visibility = View.VISIBLE
+        this.progressBar.visibility = View.GONE
+        AlertDialog.Builder(this.editTextSearch.context).setMessage(this.viewModel.resultSet.first().title).setTitle("" + this.viewModel.resultSet.size)
+            .setPositiveButton(android.R.string.ok, null).show()
     }
 }
