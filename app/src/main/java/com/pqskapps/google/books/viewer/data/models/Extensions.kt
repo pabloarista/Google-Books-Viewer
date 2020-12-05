@@ -10,10 +10,10 @@ fun Root?.toBooks(): List<Book> {
         for (item: Item in this.items.filterNotNull()) {
             val volumeInfo: VolumeInfo? = item.volumeInfo
             val book = Book(
-                item.imageLinks?.smallThumbnail?: ""
+                volumeInfo?.imageLinks?.smallThumbnail?: ""
                 , volumeInfo?.title?: ""
                 , volumeInfo?.authors?: listOf<String>()
-                , volumeInfo?.publishedDate?: ""
+                , volumeInfo?.publishedDate?: "Unknown"
                 , volumeInfo?.description?: ""
                 , item.accessInfo?.webReaderLink?: "")
             books.add(book)
