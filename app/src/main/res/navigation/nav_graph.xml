@@ -11,12 +11,34 @@
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
         <action
-            android:id="@+id/action_searchFragment_to_searchResultsFragment"
-            app:destination="@id/searchResultsFragment" />
+            android:id="@+id/segue_results"
+            app:destination="@id/searchResultsFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/searchResultsFragment"
         android:name="com.pqskapps.google.books.viewer.ui.fragments.SearchResultsFragment"
         android:label="fragment_search_results_list"
-        tools:layout="@layout/fragment_search_results_list" />
+        tools:layout="@layout/fragment_search_results_list" >
+        <action
+            android:id="@+id/action_searchResultsFragment_to_bookDetailsFragment"
+            app:destination="@id/bookDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookDetailsFragment"
+        android:name="com.pqskapps.google.books.viewer.ui.fragments.BookDetailsFragment"
+        android:label="fragment_book_details"
+        tools:layout="@layout/fragment_book_details" >
+        <action
+            android:id="@+id/action_bookDetailsFragment_to_readerFragment"
+            app:destination="@id/readerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/readerFragment"
+        android:name="com.pqskapps.google.books.viewer.ui.fragments.ReaderFragment"
+        android:label="fragment_reader"
+        tools:layout="@layout/fragment_reader" />
 </navigation>
