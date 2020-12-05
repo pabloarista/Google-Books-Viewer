@@ -8,6 +8,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.GoogleBooksViewer" />
+        android:theme="@style/Theme.GoogleBooksViewer">
+        <activity android:name=".ui.activities.MainActivity"></activity>
+    </application>
 
 </manifest>
