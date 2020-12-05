@@ -6,6 +6,10 @@
     <string name="search_button_text">Search</string>
     <string name="error">Error</string>
     <string name="error_empty_query">Please enter something to query</string>
+    <string name="thumbnail_text">Book thumbnail</string>
+    <string name="item_title">Book Title</string>
+    <string name="item_authors">Author 1, Author 2</string>
+    <string name="item_publish_date">January 1, 2020</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
