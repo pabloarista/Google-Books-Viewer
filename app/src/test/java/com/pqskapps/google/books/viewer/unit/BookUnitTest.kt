@@ -32,7 +32,7 @@ class BookUnitTest {
     }
     @Test
     fun toBooksSingelItemTest() {
-        var item = Item(null, null, null)
+        var item = Item(null, null)
         var root = Root(1, listOf(item))
 
         var actual: List<Book> = root.toBooks()
@@ -45,7 +45,7 @@ class BookUnitTest {
 
         assertEquals(expectedString, book.thumbnail)
         assertEquals(expectedString, book.title)
-        assertEquals(expectedString, book.publishDate)
+        assertEquals("Unknown", book.publishDate)
         assertEquals(expectedString, book.description)
         assertEquals(expectedString, book.link)
         assertEquals(listOf<String>(), book.authors)
@@ -57,7 +57,7 @@ class BookUnitTest {
         val description = "myDescription"
         val link = "myLink"
 
-        item = Item(ImageLinks(thumbnail), VolumeInfo(title, authors, publishDate, description), AccessInfo(link))
+        item = Item(VolumeInfo(ImageLinks(thumbnail), title, authors, publishDate, description), AccessInfo(link, "NONE"))
         root = Root(1, listOf(item))
 
         actual = root.toBooks()

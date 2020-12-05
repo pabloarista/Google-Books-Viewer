@@ -21,7 +21,7 @@ class MockBookRepository: BookRepository {
     init {
         val tmpData = mutableListOf<Book>()
         for(i in 1..10) {
-            val book = Book("thumbnail " + i, "title " + i, listOf("author 1 - " + i, "author 2 - " + i), "2020-01-01", "some description " + i, "my linke " + i)
+            val book = Book("thumbnail " + i, "title " + i, listOf("author 1 - " + i, "author 2 - " + i), "2020-01-01", "some description " + i, "my linke " + i, true)
             tmpData.add(book)
         }
         this.data = tmpData
