@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import com.pqskapps.google.books.viewer.R
 import com.pqskapps.google.books.viewer.data.models.Book
 import kotlinx.coroutines.CoroutineScope
@@ -19,7 +20,8 @@ import java.io.InputStream
 import java.net.URL
 
 class MyBookRecyclerViewAdapter(
-    private val values: List<Book>
+    private val values: List<Book>,
+    private val clickListener: View.OnClickListener
 ) : RecyclerView.Adapter<MyBookRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -34,19 +36,9 @@ class MyBookRecyclerViewAdapter(
         holder.titleView.text = title
         holder.authorsView.text = if(item.authors.isEmpty()) "Unknown" else item.authors.joinToString()
         holder.publishDateView.text = item.publishDate
-        if(!item.thumbnail.isNullOrBlank()) {
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    val url = URL(item.thumbnail)
-                    val bmp: Bitmap = BitmapFactory.decodeStream(url.content as InputStream)
-                    withContext(Dispatchers.Main) {
-                        holder.thumbnailView.setImageBitmap(bmp)
-                    }//withContext
-                } catch(t: Throwable) {
-                    Log.e(MyBookRecyclerViewAdapter::class.java.name, t.message?: "Unknown error")
-                }//catch
-            }
-        }//if
+        holder.thumbnailView.load(item.thumbnail)
+        holder.itemView.tag = position
+        holder.itemView.setOnClickListener(clickListener)
     }
 
     override fun getItemCount(): Int = values.size

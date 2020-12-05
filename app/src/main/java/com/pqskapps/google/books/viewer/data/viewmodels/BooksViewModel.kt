@@ -32,7 +32,7 @@ open class BooksViewModel(private val bookRepository: BookRepository): ViewModel
         private set(value) { field = value }
     //the current book to display (when the user taps on an entry in the list of the result set
     var selectedBook: Book? = null
-        private set(value) { field = value }
+        set(value) { field = value }
 
     //used for coroutines, so that we don't block the main UI thread
     private val viewModelJob = SupervisorJob()

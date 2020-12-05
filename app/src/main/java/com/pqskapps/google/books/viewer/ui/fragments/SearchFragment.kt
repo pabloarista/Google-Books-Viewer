@@ -43,7 +43,6 @@ class SearchFragment : Fragment(), View.OnClickListener, View.OnFocusChangeListe
         this.editTextSearch.setOnFocusChangeListener(this)
         this.layoutControls = view.findViewById(R.id.layoutControls)
         this.progressBar = view.findViewById(R.id.progressBar)
-//        this.viewModel = (activity?.application as GoogleBooksViewerApplication).booksViewModel
         this.viewModel.callback = ::navigateToResults
         super.onViewCreated(view, savedInstanceState)
     }

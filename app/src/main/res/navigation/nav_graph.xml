@@ -24,8 +24,12 @@
         android:label="fragment_search_results_list"
         tools:layout="@layout/fragment_search_results_list" >
         <action
-            android:id="@+id/action_searchResultsFragment_to_bookDetailsFragment"
-            app:destination="@id/bookDetailsFragment" />
+            android:id="@+id/segue_details"
+            app:destination="@id/bookDetailsFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/bookDetailsFragment"
