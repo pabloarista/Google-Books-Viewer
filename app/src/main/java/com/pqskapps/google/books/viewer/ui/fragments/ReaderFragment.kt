@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.webkit.CookieManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.ProgressBar
 import com.pqskapps.google.books.viewer.GoogleBooksViewerApplication
 import com.pqskapps.google.books.viewer.R
 import com.pqskapps.google.books.viewer.data.viewmodels.BooksViewModel
@@ -30,8 +31,18 @@ class ReaderFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val webView: WebView = view.findViewById<WebView>(R.id.reader_web_view)
-        webView.webViewClient = WebViewClient()
+        val progressBar: ProgressBar = view.findViewById(R.id.progressBar_webview)
+        //set the web view client, so the app doesn't send the user to the default browser
+        webView.webViewClient = object: WebViewClient() {
+            override fun onPageFinished(view: WebView, url: String) {
+                progressBar.visibility = View.GONE
+                webView.visibility = View.VISIBLE
+            }
+        }
+
+        //we need JavaScript enabled in order for the pages to load properly
         webView.settings.javaScriptEnabled = true
+        //we need cookies enabled in order for the pages to load properly
         val manager: CookieManager = CookieManager.getInstance()
         if(android.os.Build.VERSION.SDK_INT >= 21) {
             manager.setAcceptThirdPartyCookies(webView, true)
@@ -39,8 +50,6 @@ class ReaderFragment : Fragment() {
             manager.setAcceptCookie(true)
         }//else
         webView.loadUrl(viewModel.selectedBook!!.link!!)
-//        webView.isVerticalScrollBarEnabled = true
-//        webView.isHorizontalScrollBarEnabled = true
 
         super.onViewCreated(view, savedInstanceState)
     }
