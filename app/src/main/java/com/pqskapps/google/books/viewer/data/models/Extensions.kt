@@ -15,7 +15,8 @@ fun Root?.toBooks(): List<Book> {
                 , volumeInfo?.authors?: listOf<String>()
                 , volumeInfo?.publishedDate?: "Unknown"
                 , volumeInfo?.description?: ""
-                , item.accessInfo?.webReaderLink?: "")
+                , item.accessInfo?.webReaderLink?: ""
+                , item.accessInfo?.accessViewStatus != "NONE")
             books.add(book)
         }//for
     }//if

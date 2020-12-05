@@ -16,4 +16,6 @@
         "This is another description"
     </string>
     <string name="details_link_title"><u>View Book</u></string>
+    <string name="details_link_unavailable_title">No Book Preview Available</string>
+    <string name="details_no_link">Error loading book</string>
 </resources>
