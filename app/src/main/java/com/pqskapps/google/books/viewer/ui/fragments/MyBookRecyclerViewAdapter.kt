@@ -37,6 +37,7 @@ class MyBookRecyclerViewAdapter(
         holder.authorsView.text = if(item.authors.isEmpty()) "Unknown" else item.authors.joinToString()
         holder.publishDateView.text = item.publishDate
         holder.thumbnailView.load(item.thumbnail)
+        //we can use the tag to get the position. this way the view model can work with the onClickListener instead of the view
         holder.itemView.tag = position
         holder.itemView.setOnClickListener(clickListener)
     }

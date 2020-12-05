@@ -26,10 +26,10 @@
         <action
             android:id="@+id/segue_details"
             app:destination="@id/bookDetailsFragment"
-            app:enterAnim="@android:anim/fade_in"
-            app:exitAnim="@android:anim/fade_out"
-            app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@android:anim/fade_out" />
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/bookDetailsFragment"
@@ -37,8 +37,12 @@
         android:label="fragment_book_details"
         tools:layout="@layout/fragment_book_details" >
         <action
-            android:id="@+id/action_bookDetailsFragment_to_readerFragment"
-            app:destination="@id/readerFragment" />
+            android:id="@+id/segue_reader"
+            app:destination="@id/readerFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/readerFragment"
