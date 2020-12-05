@@ -1,6 +1,5 @@
 package com.pqskapps.google.books.viewer.data.repositories
 
-import android.text.TextUtils
 import com.pqskapps.google.books.viewer.data.models.Book
 
 class MockBookRepository: BookRepository {
